@@ -1,4 +1,4 @@
-package owlParser;
+package owl;
 
 import java.util.ArrayList;
 
@@ -226,11 +226,15 @@ public class OWL_Class implements Serializable{
 			text += "\n";
 		}
 		text += label + "\n";
-		/*
-		 * if (synonym != null && !synonym.isEmpty()) { text += "synonym: "; for
-		 * (String v : synonym) { text += v + " "; } text += "\n"; }
-		 * 
-		 * if (inclusion != null && !inclusion.isEmpty()) { text +=
+		
+		if (synonym != null && !synonym.isEmpty()) { 
+			for (String v : synonym) { 
+				text += v + " "; 
+			} 
+			text += "\n"; 
+		}
+			
+		 /* if (inclusion != null && !inclusion.isEmpty()) { text +=
 		 * "inclusion: "; for (String v : inclusion) { text += v + " "; } text
 		 * += "\n"; }
 		 * 

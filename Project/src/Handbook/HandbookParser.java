@@ -21,29 +21,23 @@ import org.jsoup.select.Elements;
 
 public class HandbookParser {
 	
-	public static void main(String[] args) {
-		
-//		parseAndCreateJSONFile("Handbook/allchapters.json");
-		loadAllChaptersFromJSONFile("Handbook/allchapters.json");
-	}
-	
-	
-	
-	private Document doc;
 	private String chapterPath;
+	private String jsonFilePath = "Handbook/allchapters.json";
 	
-	public HandbookParser(String path) {
-		this.chapterPath = path;
-		doc = Jsoup.parse(readFile(path));
+
+	public HandbookParser() { 
+		if (!(new File(jsonFilePath).exists())) {
+			createJSONFile();
+		}
 	}
 	
-	public static ArrayList<Chapter> loadAllChaptersFromJSONFile(String filePath) {
+	public ArrayList<Chapter> getChapters() {
 		JSONParser parser = new JSONParser();
 		Object obj;
 		JSONObject jsonObject;
 		ArrayList<Chapter> allChapters = new ArrayList<Chapter>();
 		try {
-			obj = parser.parse(new FileReader(filePath));
+			obj = parser.parse(new FileReader(jsonFilePath));
 			jsonObject = (JSONObject) obj;
 			
 			for (int i = 0; i < jsonObject.size(); i++) {
@@ -61,20 +55,23 @@ public class HandbookParser {
 		 
 	}
 	
-	public static void parseAndCreateJSONFile(String filePath) {
-		HandbookParser parser;
+	public void createJSONFile() {
 		ArrayList<Chapter> allChapters = new ArrayList<Chapter>();
+		Document doc;
+		
 		File folder = new File("Handbook/html/L/");
 		for (File file : folder.listFiles()) {
+			doc = Jsoup.parse(readFile(file));
+			chapterPath = file.getPath();
 			System.out.println("Parsing " + file.getName());
-			parser = new HandbookParser(file.getPath());
-			allChapters.add(parser.getChapter());
+			allChapters.add(getChapter(doc));
 		}
 		folder = new File("Handbook/html/T/");
 		for (File file : folder.listFiles()) {
+			doc = Jsoup.parse(readFile(file));
+			chapterPath = file.getPath();
 			System.out.println("Parsing " + file.getName());
-			parser = new HandbookParser(file.getPath());
-			allChapters.add(parser.getChapter());
+			allChapters.add(getChapter(doc));
 		}
 		JSONObject obj = new JSONObject();
 		int count = 0;
@@ -86,7 +83,7 @@ public class HandbookParser {
 		System.out.println("Saving JSON objects");
 		try {
 	 
-			FileWriter file = new FileWriter(filePath);
+			FileWriter file = new FileWriter(jsonFilePath);
 			file.write(obj.toJSONString());
 			file.flush();
 			file.close();
@@ -96,7 +93,7 @@ public class HandbookParser {
 		}
 	}
 	
-	private Chapter getChapter() {
+	private Chapter getChapter(Document doc) {
 		if (!doc.getElementsByClass("seksjon2").isEmpty()) {
 			return createChapter(doc.getElementsByClass("seksjon2").get(0));
 		} 
@@ -182,13 +179,12 @@ public class HandbookParser {
 		return newClassName;
 	}
 	
-	public String readFile(String path) {
-		File input = new File(path);
+	private String readFile(File file) {
 		String html = "";
 		
 		BufferedReader br;
 		try {
-			br = new BufferedReader(new FileReader(input));
+			br = new BufferedReader(new FileReader(file));
 			String nextLine = br.readLine();
 			do {
 				html += nextLine + "\n";
@@ -202,7 +198,7 @@ public class HandbookParser {
 		return html;
 	}
 	
-	public String fixNorwegianLetters(String text) {
+	private String fixNorwegianLetters(String text) {
 		text = text.replace("&aring;", "å");
 		text = text.replace("&oslash;", "ø");
 		text = text.replace("&aelig;", "æ");

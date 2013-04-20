@@ -1,4 +1,4 @@
-package owlParser;
+package owl;
 
 /*
  * Change default entityExpansionLimit to 120000 in run configuration
