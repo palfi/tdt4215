@@ -27,7 +27,7 @@ import owlParser.OWL_Class;
 import owlParser.OwlParser;
 
 public class HelloLucene {
-	private String path = "/Users/javier/Downloads/web_intelligence_project/";
+	private String path = "owlFiles/";
 	private String fileName = "icd10no.owl";
 	// private String fileName = "atc.owl";
 	private StandardAnalyzer analyzer;
