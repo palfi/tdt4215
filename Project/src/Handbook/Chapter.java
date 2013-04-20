@@ -1,4 +1,4 @@
-package Handbook;
+package handbook;
 
 import java.util.ArrayList;
 

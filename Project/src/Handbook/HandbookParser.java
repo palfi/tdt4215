@@ -1,4 +1,4 @@
-package Handbook;
+package handbook;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -151,7 +151,9 @@ public class HandbookParser {
 		}
 		text = text.replace("*", "");
 		text = text.replace(":", "");
-		text = text.replace("-", "");
+		text = text.replace("-", " ");
+		text = text.replace("/", " ");
+		text = text.replaceAll("[0-9]", "");
 		return text;
 	}
 	

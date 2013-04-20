@@ -74,7 +74,7 @@ public class OntologyClassificator {
 			Query q = new QueryParser(Version.LUCENE_42, "text", analyzer)
 			.parse(querystr);
 			// 3. search
-			int hitsPerPage = 5;
+			int hitsPerPage = 2;
 			IndexReader reader = DirectoryReader.open(index);
 			IndexSearcher searcher = new IndexSearcher(reader);
 			TopScoreDocCollector collector = TopScoreDocCollector.create(
