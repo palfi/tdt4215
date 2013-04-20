@@ -16,7 +16,7 @@ public class Program {
 		ArrayList<Chapter> handbookChapters = hp.getChapters();
 		
 		OntologyClassificator oc = new OntologyClassificator();
-		String line = handbookChapters.get(10).getSubchapters().get(0).getTextLines().get(0);
+		String line = handbookChapters.get(0).getTextLines().get(0);
 		System.out.println(line);
 		ArrayList<Document> hits = oc.searchLine(line);
 		System.out.println("Found " + hits.size() + " hits.");
