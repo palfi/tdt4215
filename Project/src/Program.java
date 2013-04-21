@@ -55,9 +55,33 @@ public class Program {
 
 	}
 
+	private void task1c() {
+		System.out.print("Clinical note	Sentence	ATC\n");
+		OntologyClassificator oc = new OntologyClassificator("owlFiles/",
+				"atc.owl");
+		for (int numCase = 1; numCase <= numPatientCases; numCase++) {
+			ArrayList<String> textLines = new PatientCaseParser().getCase(
+					"Case " + numCase).getTextLines();
+			System.out.print(numCase + "\t\t");
+			for (int numLine = 0; numLine < textLines.size(); numLine++) {
+				System.out.print((numLine + 1) + "\t\t");
+				String line = textLines.get(numLine);
+				ArrayList<Document> hits = oc.searchLine(line);
+				for (int i = 0; i < hits.size(); ++i) {
+					System.out.print(hits.get(i).get("code") + ", ");
+				}
+				System.out.println();
+				System.out.print("\t\t");
+			}
+			System.out.println();
+		}
+
+	}
+
 	public static void main(String[] args) {
 		Program p = new Program();
 		p.task1a();
+		p.task1c();
 		// p.start();
 	}
 
