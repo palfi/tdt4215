@@ -36,6 +36,20 @@ public class OntologyClassificator {
 		doc.add(new StringField("code", code, Field.Store.YES));
 		w.addDocument(doc);
 	}
+	
+	public OntologyClassificator(String path, String fileName) {
+		this.path = path;
+		this.fileName = fileName;
+		try {
+			index();
+		} catch (OWLOntologyCreationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public OntologyClassificator() {
 		try {
