@@ -1,13 +1,7 @@
-import handbook.Chapter;
-import handbook.HandbookParser;
-
 import java.util.ArrayList;
 
 import org.apache.lucene.document.Document;
-
-
 import owl.OntologyClassificator;
-import patientCase.PatientCase;
 import patientCase.PatientCaseParser;
 
 

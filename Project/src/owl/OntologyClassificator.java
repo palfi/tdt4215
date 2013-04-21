@@ -12,7 +12,6 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -22,9 +21,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-
-import owl.OWL_Class;
-import owl.OwlParser;
 
 public class OntologyClassificator {
 	private String path = "owlFiles/";
@@ -40,16 +36,20 @@ public class OntologyClassificator {
 		doc.add(new StringField("code", code, Field.Store.YES));
 		w.addDocument(doc);
 	}
-	
+
 	public OntologyClassificator() {
 		try {
 			index();
-		} catch (OWLOntologyCreationException | IOException e) {
+		} catch (OWLOntologyCreationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
+
 	private void index() throws OWLOntologyCreationException, IOException {
 		OwlParser owlParser = new OwlParser();
 		owlParser.parse(path, fileName);
@@ -72,7 +72,7 @@ public class OntologyClassificator {
 			// the "text" argument specifies the default field to use
 			// when no field is explicitly specified in the query.
 			Query q = new QueryParser(Version.LUCENE_42, "text", analyzer)
-			.parse(querystr);
+					.parse(querystr);
 			// 3. search
 			int hitsPerPage = 2;
 			IndexReader reader = DirectoryReader.open(index);
@@ -81,13 +81,13 @@ public class OntologyClassificator {
 					hitsPerPage, true);
 			searcher.search(q, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
-			
+
 			for (int i = 0; i < hits.length; ++i) {
 				int docId = hits[i].doc;
 				Document d = searcher.doc(docId);
 				returnDocs.add(d);
 			}
-			
+
 			reader.close();
 		} catch (Exception e) {
 			// TODO: handle exception
