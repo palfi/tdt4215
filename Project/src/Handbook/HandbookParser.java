@@ -26,7 +26,7 @@ public class HandbookParser {
 		}
 	}
 
-	public ArrayList<Chapter> getChapters() {
+	public ArrayList<Chapter> getMainChapters() {
 		JSONParser parser = new JSONParser();
 		Object obj;
 		JSONObject jsonObject;
@@ -52,6 +52,27 @@ public class HandbookParser {
 
 		return allChapters;
 
+	}
+	
+	public void createJSONFile(ArrayList<Chapter> allChapters) {
+		JSONObject obj = new JSONObject();
+		int count = 0;
+		System.out.println("Creating JSON objects");
+		for (Chapter chapter : allChapters) {
+			obj.put(count, chapter.toJSON());
+			count++;
+		}
+		System.out.println("Saving JSON objects");
+		try {
+
+			FileWriter file = new FileWriter(jsonFilePath);
+			file.write(obj.toJSONString());
+			file.flush();
+			file.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void createJSONFile() {

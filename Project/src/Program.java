@@ -1,3 +1,6 @@
+import handbook.Chapter;
+import handbook.HandbookParser;
+
 import java.util.ArrayList;
 
 import org.apache.lucene.document.Document;
@@ -31,6 +34,39 @@ public class Program {
 		}
 
 	}
+	
+	private void preprocess() {
+		new HandbookParser().createJSONFile();
+	}
+	
+	private void task1b() {
+		OntologyClassificator oc = new OntologyClassificator("owlFiles/", "icd10no.owl");
+		ArrayList<Document> hits;
+		HandbookParser hp = new HandbookParser();
+		
+		//gets main chapters
+		ArrayList<Chapter> allMainChapters = hp.getMainChapters();
+		//gets all chapters incl. subchapters
+		ArrayList<Chapter> allChapters = new ArrayList<Chapter>();
+		for (Chapter chapter : allMainChapters) {
+			allChapters.addAll(chapter.getAllChapters());
+		}
+		
+		//find and add icd codes to each chapter
+		ArrayList<String> icdCodes;
+		for (Chapter chapter : allChapters) {
+			icdCodes = new ArrayList<String>();
+			for (String line : chapter.getTextLines()) {
+				hits = oc.searchLine(line);
+				for (Document hit : hits) {
+					icdCodes.add(hit.get("code"));
+				}
+			}
+			chapter.setIcdCodes(icdCodes);
+		}
+		hp.createJSONFile(allMainChapters);
+	}
+	
 
 	private void task1a() {
 		System.out.print("Clinical note	Sentence	ICD-10\n");
@@ -52,9 +88,8 @@ public class Program {
 			}
 			System.out.println();
 		}
-
 	}
-
+	
 	private void task1c() {
 		System.out.print("Clinical note	Sentence	ATC\n");
 		OntologyClassificator oc = new OntologyClassificator("owlFiles/",
@@ -80,8 +115,8 @@ public class Program {
 
 	public static void main(String[] args) {
 		Program p = new Program();
-		p.task1a();
-		p.task1c();
+		p.task1b();
+//		p.task1a();
 		// p.start();
 	}
 

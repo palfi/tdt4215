@@ -2,6 +2,7 @@ package handbook;
 
 import java.util.ArrayList;
 
+import org.apache.lucene.queryparser.surround.query.SrndPrefixQuery;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -11,12 +12,15 @@ public class Chapter {
 	private ArrayList<String> textLines;
 	private ArrayList<Chapter> subchapters;
 	private String name;
+	private ArrayList<String> icdCodes;
 	
+
 
 	public Chapter(String path, ArrayList<String> textLines, ArrayList<Chapter> subchapters) {
 		this.path = path;
 		this.textLines = textLines;
 		this.subchapters = subchapters;
+		icdCodes = new ArrayList<String>();
 	}
 	
 	public Chapter(JSONObject jobject) {
@@ -27,6 +31,12 @@ public class Chapter {
 		JSONArray jarray = (JSONArray) jobject.get("textLines");
 		for (Object line : jarray) {
 			textLines.add((String) line);
+		}
+		icdCodes = new ArrayList<String>();
+		jarray = (JSONArray) jobject.get("icdCodes");
+		for (Object code : jarray) {
+			icdCodes.add((String) code);
+			
 		}
 		
 		jarray = (JSONArray) jobject.get("subchapters");
@@ -70,18 +80,46 @@ public class Chapter {
 		this.subchapters = subchapters;
 	}
 	
+	public ArrayList<String> getIcdCodes() {
+		return icdCodes;
+	}
+	
+	public void setIcdCodes(ArrayList<String> icdCodes) {
+		this.icdCodes = icdCodes;
+	}
+	
+	/**
+	 * Gets the main chapter as well as all subchapters, including the sub chapters of the subchapters.
+	 * @return
+	 */
+	public ArrayList<Chapter> getAllChapters() {
+		ArrayList<Chapter> r = new ArrayList<Chapter>();
+		r.add(this);
+		for (Chapter subchapter : subchapters) {
+			r.addAll(subchapter.getAllChapters());
+		}
+		return r;
+		
+	}
+	
 	public JSONObject toJSON() {
 		JSONObject jobject = new JSONObject();
 		jobject.put("path", path);
 		jobject.put("name", name);
 		jobject.put("textLines", textLines);
 		
-		JSONArray jarray = new JSONArray();
+		JSONArray jChapters = new JSONArray();
 		for (Chapter subchapter : subchapters) {
-			jarray.add(subchapter.toJSON());
+			jChapters.add(subchapter.toJSON());
 		}
 		
-		jobject.put("subchapters", jarray);
+		JSONArray jCodes = new JSONArray();
+		for (String code : icdCodes) {
+			jCodes.add(code);
+		}
+		
+		jobject.put("icdCodes", jCodes);
+		jobject.put("subchapters", jChapters);
 		
 		return jobject;
 	}
