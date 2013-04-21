@@ -116,6 +116,8 @@ public class Program {
 	public static void main(String[] args) {
 		Program p = new Program();
 		p.task1b();
+		ArrayList<Chapter> c = new HandbookParser().getMainChapters();
+		System.out.println(c.get(10).getPath());
 //		p.task1a();
 		// p.start();
 	}

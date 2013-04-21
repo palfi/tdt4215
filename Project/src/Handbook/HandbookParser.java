@@ -138,18 +138,36 @@ public class HandbookParser {
 		for (Element e : allElements) {
 			if (e.parent().id().equals(element.id())) {
 				if (e.className().equals("def")) {
-					text += getText(e, headersToBeIgnored) + "\n";
+					text += getText(e, headersToBeIgnored) + ". ";
 				} else if (e.className().equals("sub8")) {
 					for (Element sub8e : e.children()) {
 						if (sub8e.className().equals("def")) {
-							text += getText(e, headersToBeIgnored) + "\n";
+							text += getText(sub8e, headersToBeIgnored) + ". ";
+						} else if ( sub8e.className().equals("") && !sub8e.text().equals("")) {
+							text += sub8e.text() + ". ";
 						}
 					}
 				}
+				
 			}
 		}
+		
+		for (Element child : element.children()) {
+			if (child.className().equals("") && !child.text().equals("")) {
+				text += "\n" + child.text() + ". ";
+			}
+		}
+		text = text.replaceAll("[0-9]", "");
+		text = text.replace("T.", "");
+		text = text.replace("T..", "");
+		text = text.replace("T...", "");
+		text = text.replace("L.", "");
+		text = text.replace("L..", "");
+		text = text.replace("L...", "");
+		
 		ArrayList<String> textLines = getTextLines(text);
-		Chapter c = new Chapter(chapterPath, textLines, subchapters);
+		
+		Chapter c = new Chapter(chapterPath + "#" + element.id(), textLines, subchapters);
 		String chapterName = element.child(0).ownText().replace("*", "");
 		c.setName(chapterName);
 		return c;
@@ -167,34 +185,23 @@ public class HandbookParser {
 		String text = "";
 		for (Element child : e.children()) {
 			if (!headersToBeIgnored.contains(child)) {
-				text += child.text();
+				text += child.text() + ". ";
 			}
 		}
-		text = text.replace("*", "");
-		text = text.replace(":", "");
-		text = text.replace("-", " ");
-		text = text.replace("/", " ");
-		text = text.replaceAll("[0-9]", "");
+		
 		return text;
 	}
 
 	private ArrayList<String> getTextLines(String fullText) {
 		String[] lines = fullText.split("\\. ");
 		ArrayList<String> temp = new ArrayList<String>();
-		temp.add(lines[0]);
-		for (int i = 1; i < lines.length; i++) {
-			if (lines[i].length() > 0) {
-				int firstLetter = lines[i].charAt(0);
-				// check if the next letter start with uppercase
-				if ((firstLetter <= 90 && firstLetter >= 65)
-						|| firstLetter == 197 || firstLetter == 198
-						|| firstLetter == 216) {
-					temp.add(lines[i]);
-				} else {
-					temp.set(temp.size() - 1, temp.get(temp.size() - 1) + ". "
-							+ lines[i]);
-				}
-			}
+		
+		
+		for (String string : lines) {
+			string = string.replaceAll("[^\\p{L}\\p{N}\\s]", "");
+			string = string.replace("\n","");
+			if (string.length() > 4)
+				temp.add(string);
 		}
 		return temp;
 	}
