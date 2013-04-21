@@ -36,7 +36,7 @@ public class OntologyClassificator {
 		doc.add(new StringField("code", code, Field.Store.YES));
 		w.addDocument(doc);
 	}
-	
+
 	public OntologyClassificator(String path, String fileName) {
 		this.path = path;
 		this.fileName = fileName;
@@ -87,7 +87,7 @@ public class OntologyClassificator {
 			Query q = new QueryParser(Version.LUCENE_42, "text", analyzer)
 					.parse(querystr);
 			// 3. search
-			int hitsPerPage = 2;
+			int hitsPerPage = 6;
 			IndexReader reader = DirectoryReader.open(index);
 			IndexSearcher searcher = new IndexSearcher(reader);
 			TopScoreDocCollector collector = TopScoreDocCollector.create(
@@ -95,10 +95,13 @@ public class OntologyClassificator {
 			searcher.search(q, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
-			for (int i = 0; i < hits.length; ++i) {
+			for (int i = 0; i < hits.length - 1; ++i) {
 				int docId = hits[i].doc;
 				Document d = searcher.doc(docId);
 				returnDocs.add(d);
+				if (hits[i + 1].score < hits[i].score) {
+					break;
+				}
 			}
 
 			reader.close();
