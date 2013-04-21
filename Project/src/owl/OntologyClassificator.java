@@ -61,7 +61,6 @@ public class OntologyClassificator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	private void index() throws OWLOntologyCreationException, IOException {
