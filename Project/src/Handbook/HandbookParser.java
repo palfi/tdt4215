@@ -119,6 +119,7 @@ public class HandbookParser {
 		}
 		return null;
 	}
+	
 
 	private Chapter createChapter(Element element) {
 		ArrayList<Chapter> subchapters = new ArrayList<Chapter>();

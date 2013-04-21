@@ -1,19 +1,41 @@
 import handbook.Chapter;
 import handbook.HandbookParser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.no.NorwegianAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Version;
+
+import owl.OWL_Class;
 import owl.OntologyClassificator;
+import patientCase.PatientCase;
 import patientCase.PatientCaseParser;
 
 public class Program {
-	private String path = "owlFiles/";
-	private String fileName = "icd10no.owl";
+	private static String path = "owlFiles/";
+	private static String fileName = "icd10no.owl";
 	// private String fileName = "atc.owl";
-	private int numPatientCases = 8;
+	private static int numPatientCases = 8;
 
-	private void start() {
+	private static void start() {
 		// HandbookParser hp = new HandbookParser();
 		// hp.createJSONFile();
 		// ArrayList<Chapter> handbookChapters = hp.getChapters();
@@ -35,11 +57,11 @@ public class Program {
 
 	}
 	
-	private void preprocess() {
+	private static void preprocess() {
 		new HandbookParser().createJSONFile();
 	}
 	
-	private void task1b() {
+	private static void task1b() {
 		OntologyClassificator oc = new OntologyClassificator("owlFiles/", "icd10no.owl");
 		ArrayList<Document> hits;
 		HandbookParser hp = new HandbookParser();
@@ -68,7 +90,7 @@ public class Program {
 	}
 	
 
-	private void task1a() {
+	private static void task1a() {
 		System.out.print("Clinical note	Sentence	ICD-10\n");
 		OntologyClassificator oc = new OntologyClassificator("owlFiles/",
 				"icd10no.owl");
@@ -90,7 +112,7 @@ public class Program {
 		}
 	}
 	
-	private void task1c() {
+	private static void task1c() {
 		System.out.print("Clinical note	Sentence	ATC\n");
 		OntologyClassificator oc = new OntologyClassificator("owlFiles/",
 				"atc.owl");
@@ -113,13 +135,88 @@ public class Program {
 
 	}
 
-	public static void main(String[] args) {
-		Program p = new Program();
-		p.task1b();
-		ArrayList<Chapter> c = new HandbookParser().getMainChapters();
-		System.out.println(c.get(10).getPath());
-//		p.task1a();
-		// p.start();
+	public static void main(String[] args) throws IOException {
+//		task1b();
+		HandbookParser hb = new HandbookParser();
+		ArrayList<Chapter> allChapters = new ArrayList<Chapter>();
+		for (Chapter chapter : hb.getMainChapters()) {
+			allChapters.addAll(chapter.getAllChapters());
+		}
+		
+		 Directory index = index(allChapters);
+		
+		PatientCaseParser pcp = new PatientCaseParser();
+		ArrayList<PatientCase> cases = new ArrayList<PatientCase>();
+		String[] caseNames = {"Case 1", "Case 2", "Case 3", "Case 4", "Case 5", "Case 6", "Case 7", "Case 8"};
+		for (String caseName : caseNames) {
+			cases.add(pcp.getCase(caseName));
+		}
+		OntologyClassificator oc = new OntologyClassificator();
+		for (PatientCase pc : cases) {
+			String patientCaseIcdCodes = "";
+			for (String line: pc.getTextLines()) {
+				for (Document hit : oc.searchLine(line)) {
+					patientCaseIcdCodes += hit.get("code") + " ";		
+				}
+			}
+			System.out.println(pc.getcaseName() + " - " + patientCaseIcdCodes);
+			for (Document hit : search(patientCaseIcdCodes, index)) {
+				System.out.println(hit.get("name"));
+			}
+			System.out.println("--------------------------------");
+		}
+			
+	}
+	
+	public static ArrayList<Document> search(String querystr, Directory index) {
+		ArrayList<Document> returnDocs = new ArrayList<Document>();
+		try {
+			StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_42);
+			Query q = new QueryParser(Version.LUCENE_42, "icdCodes", analyzer)
+					.parse(querystr);
+			// 3. search
+			int hitsPerPage = 6;
+			IndexReader reader = DirectoryReader.open(index);
+			IndexSearcher searcher = new IndexSearcher(reader);
+			TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
+			searcher.search(q, collector);
+			ScoreDoc[] hits = collector.topDocs().scoreDocs;
+			for (int i = 0; i < hits.length - 1; ++i) {
+				int docId = hits[i].doc;
+				Document d = searcher.doc(docId);
+				returnDocs.add(d);	
+			}
+
+			reader.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return returnDocs;
+	}
+	
+	private static Directory index(ArrayList<Chapter> allChapters) throws IOException {
+		Directory index = new RAMDirectory();
+		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_42);
+		IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_42, analyzer);
+		IndexWriter w = new IndexWriter(index, config);
+		for (Chapter c : allChapters) {
+			addDoc(w, c.getIcdCodes(), c.getPath(), c.getName());
+		}
+		w.close();
+		return index;
+	}
+	
+	private static void addDoc(IndexWriter w, ArrayList<String> icdCodes, String path, String name)
+			throws IOException {
+		Document doc = new Document();
+		String icdCodeString = "";
+		for (String code : icdCodes) {
+			icdCodeString += code + " ";
+		}
+		doc.add(new TextField("icdCodes", icdCodeString, Field.Store.NO));
+		doc.add(new StringField("path", path, Field.Store.YES));
+		doc.add(new StringField("name", name, Field.Store.YES));
+		w.addDocument(doc);
 	}
 
 }
