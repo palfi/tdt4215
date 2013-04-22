@@ -123,10 +123,13 @@ public class Program {
 					patientCaseIcdCodes += hit.get("code") + " ";
 				}
 			}
-			System.out.println(pc.getcaseName() + " - " + patientCaseIcdCodes);
+			System.out.println(pc.getcaseName());
+			System.out.println("Icd codes: " + patientCaseIcdCodes);
+			int i = 0;
 			for (Document hit : OntologyClassificator.search(
 					patientCaseIcdCodes, index)) {
-				System.out.println(hit.get("name"));
+				System.out.println(i + ": " + hit.get("path") + " \t:\t" + hit.get("name"));
+				i++;
 			}
 			System.out.println("--------------------------------");
 		}
@@ -134,7 +137,7 @@ public class Program {
 	}
 
 	public static void main(String[] args) throws IOException {
-		task1b();
+//		task1b();
 		task2();
 	}
 
