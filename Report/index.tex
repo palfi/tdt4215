@@ -1,0 +1,83 @@
+% TDT4215 Web-intelligence
+% NTNU spring 2013
+
+\documentclass[11pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{color}
+\usepackage{hyperref}
+
+\definecolor{darkred}{rgb}{.5,0,0}
+\definecolor{darkgreen}{rgb}{0,.5,0}
+\definecolor{darkblue}{rgb}{0,0,.5}
+\hypersetup{
+	colorlinks,
+	linkcolor=darkblue,
+	filecolor=darkgreen,
+	urlcolor=darkred,
+	citecolor=darkblue}
+
+
+% --------------------------------------------------------------------------- %
+% Custom commands
+% --------------------------------------------------------------------------- %
+\newcommand{\ICD}{International Classification of Diseases}
+\newcommand{\ATC}{Anatomical Therapeutic Chemical classification of Drug}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+
+\begin{document}
+
+% --------------------------------------------------------------------------- %
+% Title page
+% --------------------------------------------------------------------------- %
+\begin{titlepage}
+\center
+\textsc{\Large Norwegian Univeristy of Science and Technology}\\[1.5cm]
+\textsc{\large Department of Computer and Information Science}\\[0.5cm]
+\textsc{TDT4215 Web-intelligence}\\[0.5cm]
+
+\HRule \\[0.5cm]
+{\huge \bfseries Group project}\\[0.2cm]
+\HRule \\[1.5cm]
+
+\Large \emph{Authors:}\\
+Anders \textsc{Palfi}\\
+Javier \textsc{Elizaga Quevedo}\\
+Einar \textsc{Uvsløkk}\\[3cm]
+
+{\large \today}\\[3cm]
+
+\vfill
+
+\end{titlepage}
+
+% --------------------------------------------------------------------------- %
+% Table of contents
+% --------------------------------------------------------------------------- %
+\tableofcontents
+
+% --------------------------------------------------------------------------- %
+% Chapters
+% --------------------------------------------------------------------------- %
+\include{introduction}
+\include{architechture}
+\include{result}
+\include{conclusion}
+
+
+% --------------------------------------------------------------------------- %
+% Bibliography
+% --------------------------------------------------------------------------- %
+\bibliographystyle{alpha}
+\bibliography{references}
+\addcontentsline{toc}{chapter}{Bibliography}
+
+
+% --------------------------------------------------------------------------- %
+% Appendices
+% --------------------------------------------------------------------------- %
+
+
+\end{document}
+
