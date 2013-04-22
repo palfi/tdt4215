@@ -90,6 +90,15 @@ public class Chapter {
 	public ArrayList<String> getIcdCodes() {
 		return icdCodes;
 	}	
+	
+	public ArrayList<String> getIcdCodesIncSub() {
+		ArrayList<String> r = new ArrayList<String>();
+		r.addAll(icdCodes);
+		for (Chapter sub : subchapters) {
+			r.addAll(sub.getIcdCodes());
+		}
+		return r;
+	}
 		
 	public void setIcdCodes(ArrayList<String> icdCodes) {
 		this.icdCodes = icdCodes;

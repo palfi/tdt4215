@@ -139,7 +139,7 @@ public class OntologyClassificator {
 				analyzer);
 		IndexWriter w = new IndexWriter(index, config);
 		for (Chapter c : allChapters) {
-			addDoc(w, c.getIcdCodes(), c.getPath(), c.getName());
+			addDoc(w, c.getIcdCodesIncSub(), c.getPath(), c.getName());
 		}
 		w.close();
 		return index;
