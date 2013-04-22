@@ -134,7 +134,7 @@ public class Program {
 
 	public static void main(String[] args) throws IOException {
 		//task1a();
-		task1b();
+//		task1b();
 		//task1c();
 		task2();
 	}
