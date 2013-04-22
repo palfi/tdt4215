@@ -43,7 +43,7 @@ public class Program {
 				"icd10no.owl");
 		ArrayList<Document> hits;
 		HandbookParser hp = new HandbookParser();
-
+		
 		// gets main chapters
 		ArrayList<Chapter> allMainChapters = hp.getMainChapters();
 		// gets all chapters incl. subchapters
@@ -51,7 +51,7 @@ public class Program {
 		for (Chapter chapter : allMainChapters) {
 			allChapters.addAll(chapter.getAllChapters());
 		}
-
+		System.out.println("Getting icd codes for handbook chapters...");
 		// find and add icd codes to each chapter
 		ArrayList<String> icdCodes;
 		for (Chapter chapter : allChapters) {
@@ -97,13 +97,15 @@ public class Program {
 		for (Chapter chapter : hb.getMainChapters()) {
 			allChapters.addAll(chapter.getAllChapters());
 		}
+		System.out.println("Creating index of chapters icd codes...");
 		Directory index = OntologyClassificator.createIndex(allChapters);
 		PatientCaseParser pcp = new PatientCaseParser();
+		System.out.println("Reading cases...");
 		ArrayList<PatientCase> cases = new ArrayList<PatientCase>();
 		for (int numCase = 1; numCase <= numPatientCases; numCase++) {
 			cases.add(pcp.getCase("Case " + numCase));
 		}
-
+		System.out.println("Adding icd codes to cases...");
 		OntologyClassificator oc = new OntologyClassificator("owlFiles/",
 				"icd10no.owl");
 		for (PatientCase pc : cases) {
@@ -111,10 +113,11 @@ public class Program {
 			for (String line : pc.getTextLines()) {
 				for (Document hit : oc.search(line)) {
 					patientCaseIcdCodes += hit.get("code").replaceAll(
-							"[^-a-zA-Z0-9\\.]", "")
+							"[^-a-zA-Z0-9æøåÆØÅ\\.]", "")
 							+ " ";
 				}
 			}
+			System.out.println("Searching index with " + pc.getcaseName() + " icd codes");
 			System.out.println(pc.getcaseName());
 			System.out.println("Icd codes: " + patientCaseIcdCodes);
 			int i = 0;
@@ -131,7 +134,7 @@ public class Program {
 
 	public static void main(String[] args) throws IOException {
 		//task1a();
-		//task1b();
+		task1b();
 		//task1c();
 		task2();
 	}

@@ -233,18 +233,18 @@ public class OWL_Class implements Serializable {
 			}
 			text += "\n";
 		}
-		if (inclusion != null && !inclusion.isEmpty()) {
-			for (String v : inclusion) {
-				text += v + " ";
-			}
-			text += "\n";
-		}
-		if (umls_semanticType != null && !umls_semanticType.isEmpty()) {
-			for (String v : umls_semanticType) {
-				text += v + " ";
-			}
-			text += "\n";
-		}
+//		if (inclusion != null && !inclusion.isEmpty()) {
+//			for (String v : inclusion) {
+//				text += v + " ";
+//			}
+//			text += "\n";
+//		}
+//		if (umls_semanticType != null && !umls_semanticType.isEmpty()) {
+//			for (String v : umls_semanticType) {
+//				text += v + " ";
+//			}
+//			text += "\n";
+//		}
 		text = text.replace("-", " ");
 		text = text.replace("/", " ");
 		text = text.replaceAll("[0-9]", "");
