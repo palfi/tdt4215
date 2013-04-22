@@ -56,25 +56,26 @@ public class Program {
 		}
 
 	}
-	
+
 	private static void preprocess() {
 		new HandbookParser().createJSONFile();
 	}
-	
+
 	private static void task1b() {
-		OntologyClassificator oc = new OntologyClassificator("owlFiles/", "icd10no.owl");
+		OntologyClassificator oc = new OntologyClassificator("owlFiles/",
+				"icd10no.owl");
 		ArrayList<Document> hits;
 		HandbookParser hp = new HandbookParser();
-		
-		//gets main chapters
+
+		// gets main chapters
 		ArrayList<Chapter> allMainChapters = hp.getMainChapters();
-		//gets all chapters incl. subchapters
+		// gets all chapters incl. subchapters
 		ArrayList<Chapter> allChapters = new ArrayList<Chapter>();
 		for (Chapter chapter : allMainChapters) {
 			allChapters.addAll(chapter.getAllChapters());
 		}
-		
-		//find and add icd codes to each chapter
+
+		// find and add icd codes to each chapter
 		ArrayList<String> icdCodes;
 		for (Chapter chapter : allChapters) {
 			icdCodes = new ArrayList<String>();
@@ -88,7 +89,6 @@ public class Program {
 		}
 		hp.createJSONFile(allMainChapters);
 	}
-	
 
 	private static void task1a() {
 		System.out.print("Clinical note	Sentence	ICD-10\n");
@@ -111,7 +111,7 @@ public class Program {
 			System.out.println();
 		}
 	}
-	
+
 	private static void task1c() {
 		System.out.print("Clinical note	Sentence	ATC\n");
 		OntologyClassificator oc = new OntologyClassificator("owlFiles/",
@@ -136,27 +136,28 @@ public class Program {
 	}
 
 	public static void main(String[] args) throws IOException {
-//		task1b();
+		// task1b();
 		HandbookParser hb = new HandbookParser();
 		ArrayList<Chapter> allChapters = new ArrayList<Chapter>();
 		for (Chapter chapter : hb.getMainChapters()) {
 			allChapters.addAll(chapter.getAllChapters());
 		}
-		
-		 Directory index = index(allChapters);
-		
+
+		Directory index = index(allChapters);
+
 		PatientCaseParser pcp = new PatientCaseParser();
 		ArrayList<PatientCase> cases = new ArrayList<PatientCase>();
-		String[] caseNames = {"Case 1", "Case 2", "Case 3", "Case 4", "Case 5", "Case 6", "Case 7", "Case 8"};
+		String[] caseNames = { "Case 1", "Case 2", "Case 3", "Case 4",
+				"Case 5", "Case 6", "Case 7", "Case 8" };
 		for (String caseName : caseNames) {
 			cases.add(pcp.getCase(caseName));
 		}
 		OntologyClassificator oc = new OntologyClassificator();
 		for (PatientCase pc : cases) {
 			String patientCaseIcdCodes = "";
-			for (String line: pc.getTextLines()) {
+			for (String line : pc.getTextLines()) {
 				for (Document hit : oc.searchLine(line)) {
-					patientCaseIcdCodes += hit.get("code") + " ";		
+					patientCaseIcdCodes += hit.get("code") + " ";
 				}
 			}
 			System.out.println(pc.getcaseName() + " - " + patientCaseIcdCodes);
@@ -165,9 +166,9 @@ public class Program {
 			}
 			System.out.println("--------------------------------");
 		}
-			
+
 	}
-	
+
 	public static ArrayList<Document> search(String querystr, Directory index) {
 		ArrayList<Document> returnDocs = new ArrayList<Document>();
 		try {
@@ -178,13 +179,14 @@ public class Program {
 			int hitsPerPage = 6;
 			IndexReader reader = DirectoryReader.open(index);
 			IndexSearcher searcher = new IndexSearcher(reader);
-			TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
+			TopScoreDocCollector collector = TopScoreDocCollector.create(
+					hitsPerPage, true);
 			searcher.search(q, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
 			for (int i = 0; i < hits.length - 1; ++i) {
 				int docId = hits[i].doc;
 				Document d = searcher.doc(docId);
-				returnDocs.add(d);	
+				returnDocs.add(d);
 			}
 
 			reader.close();
@@ -193,11 +195,13 @@ public class Program {
 		}
 		return returnDocs;
 	}
-	
-	private static Directory index(ArrayList<Chapter> allChapters) throws IOException {
+
+	private static Directory index(ArrayList<Chapter> allChapters)
+			throws IOException {
 		Directory index = new RAMDirectory();
 		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_42);
-		IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_42, analyzer);
+		IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_42,
+				analyzer);
 		IndexWriter w = new IndexWriter(index, config);
 		for (Chapter c : allChapters) {
 			addDoc(w, c.getIcdCodes(), c.getPath(), c.getName());
@@ -205,9 +209,9 @@ public class Program {
 		w.close();
 		return index;
 	}
-	
-	private static void addDoc(IndexWriter w, ArrayList<String> icdCodes, String path, String name)
-			throws IOException {
+
+	private static void addDoc(IndexWriter w, ArrayList<String> icdCodes,
+			String path, String name) throws IOException {
 		Document doc = new Document();
 		String icdCodeString = "";
 		for (String code : icdCodes) {
