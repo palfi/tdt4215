@@ -120,6 +120,16 @@ public class HandbookParser {
 		return null;
 	}
 	
+	public static void main(String[] args) {
+		File file = new File("Handbook/html/T/T15.1.htm");
+		HandbookParser hp = new HandbookParser();
+		Document doc = Jsoup.parse(hp.readFile(file));
+		Chapter c = hp.createChapter(doc.getElementById("i19650"));
+		for (String string : c.getTextLines()) {
+			System.out.println(string);
+		}
+	}
+	
 	private Chapter createChapter(Element element) {
 		ArrayList<Chapter> subchapters = new ArrayList<Chapter>();
 		String text = "";
@@ -204,8 +214,7 @@ public class HandbookParser {
 		
 		
 		for (String string : lines) {
-			string = string.replaceAll("[^\\p{L}\\p{N}\\s]", "");
-			string = string.replace("\n","");
+			string = string.replaceAll("[^a-zA-ZæøåÆØÅ ]", "");
 			if (string.length() > 4)
 				temp.add(string);
 		}

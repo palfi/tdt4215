@@ -9,6 +9,13 @@ public class PatientCaseParser {
 	public PatientCaseParser() {
 
 	}
+	
+	public static void main(String[] args) {
+		PatientCase c = new PatientCaseParser().getCase("Case 7");
+		for (String line : c.getTextLines()) {
+			System.out.println(line);
+		}
+	}
 
 	public PatientCase getCase(String caseName) {
 		PatientCase patientCase;
@@ -24,6 +31,7 @@ public class PatientCaseParser {
 		for (int i = 1; i < lines.length; i++) {
 			if (lines[i].length() > 0) {
 				int firstLetter = lines[i].charAt(0);
+				lines[i] = lines[i].replaceAll("[^a-zA-ZæøåÆØÅ ]", "");
 				// check if the next letter start with uppercase
 				if ((firstLetter <= 90 && firstLetter >= 65)
 						|| firstLetter == 197 || firstLetter == 198
