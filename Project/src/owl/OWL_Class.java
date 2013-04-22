@@ -32,7 +32,7 @@ import java.io.Serializable;
  */
 
 @SuppressWarnings("serial")
-public class OWL_Class implements Serializable{
+public class OWL_Class implements Serializable {
 
 	private static final String PREFIX = "http://research.idi.ntnu.no/hilab/ehr/ontologies/icd10no.owl#";
 	private static final String CODE_FORMATTED = PREFIX + "code_formatted";
@@ -43,7 +43,8 @@ public class OWL_Class implements Serializable{
 	private static final String UMLS_TUI = PREFIX + "umls_tui";
 	private static final String UMLS_CONCEPTID = PREFIX + "umls_conceptId";
 	private static final String UMLS_ATOMID = PREFIX + "umls_atomId";
-	private static final String UMLS_SEMANTICTYPE = PREFIX + "umls_semanticType";
+	private static final String UMLS_SEMANTICTYPE = PREFIX
+			+ "umls_semanticType";
 	private static final String EXCLUSION = PREFIX + "exclusion";
 	private static final String SYNONYM = PREFIX + "synonym";
 	private static final String UNDERTERM = PREFIX + "underterm";
@@ -226,25 +227,24 @@ public class OWL_Class implements Serializable{
 			text += "\n";
 		}
 		text += label + "\n";
-		
-		if (synonym != null && !synonym.isEmpty()) { 
-			for (String v : synonym) { 
-				text += v + " "; 
-			} 
-			text += "\n"; 
+		if (synonym != null && !synonym.isEmpty()) {
+			for (String v : synonym) {
+				text += v + " ";
+			}
+			text += "\n";
 		}
-			
-		 /* if (inclusion != null && !inclusion.isEmpty()) { text +=
-		 * "inclusion: "; for (String v : inclusion) { text += v + " "; } text
-		 * += "\n"; }
-		 * 
-		 * text += "label: "; text += label + "\n";
-		 * 
-		 * if (umls_semanticType != null && !umls_semanticType.isEmpty()) { text
-		 * += "umls_semanticType: "; for (String v : umls_semanticType) { text
-		 * += v + " "; } text += "\n"; } text += "icpc2_label: "; text +=
-		 * icpc2_label + "\n";
-		 */
+		if (inclusion != null && !inclusion.isEmpty()) {
+			for (String v : inclusion) {
+				text += v + " ";
+			}
+			text += "\n";
+		}
+		if (umls_semanticType != null && !umls_semanticType.isEmpty()) {
+			for (String v : umls_semanticType) {
+				text += v + " ";
+			}
+			text += "\n";
+		}
 		text = text.replace("-", " ");
 		text = text.replace("/", " ");
 		text = text.replaceAll("[0-9]", "");

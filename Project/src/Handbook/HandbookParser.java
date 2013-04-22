@@ -37,8 +37,7 @@ public class HandbookParser {
 
 			for (int i = 0; i < jsonObject.size(); i++) {
 				JSONObject chapter = (JSONObject) jsonObject.get(i + "");
-				System.out.println("Loading from JSON file... " + (i + 1) + "/"
-						+ jsonObject.size());
+//				System.out.println("Loading from JSON file... " + (i + 1) + "/" + jsonObject.size());
 				allChapters.add(new Chapter(chapter));
 			}
 
@@ -54,6 +53,7 @@ public class HandbookParser {
 
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void createJSONFile(ArrayList<Chapter> allChapters) {
 		JSONObject obj = new JSONObject();
 		int count = 0;
@@ -75,6 +75,7 @@ public class HandbookParser {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void createJSONFile() {
 		ArrayList<Chapter> allChapters = new ArrayList<Chapter>();
 		Document doc;

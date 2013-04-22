@@ -1,15 +1,7 @@
 package handbook;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
-import org.apache.lucene.queryparser.surround.query.SrndPrefixQuery;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -118,6 +110,7 @@ public class Chapter {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	public JSONObject toJSON() {
 		JSONObject jobject = new JSONObject();
 		jobject.put("path", path);

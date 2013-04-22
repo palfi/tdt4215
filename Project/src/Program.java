@@ -4,29 +4,40 @@ import handbook.HandbookParser;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.util.Version;
 
 import owl.OntologyClassificator;
 import patientCase.PatientCase;
 import patientCase.PatientCaseParser;
 
 public class Program {
-	// private String fileName = "atc.owl";
 	private static int numPatientCases = 8;
 
-	private static void preprocess() {
-		new HandbookParser().createJSONFile();
+	@SuppressWarnings("unused")
+	private static void task1a() {
+		System.out.print("Clinical note	Sentence	ICD-10\n");
+		OntologyClassificator oc = new OntologyClassificator("owlFiles/",
+				"icd10no.owl");
+		for (int numCase = 1; numCase <= numPatientCases; numCase++) {
+			ArrayList<String> textLines = new PatientCaseParser().getCase(
+					"Case " + numCase).getTextLines();
+			System.out.print(numCase + "\t\t");
+			for (int numLine = 0; numLine < textLines.size(); numLine++) {
+				System.out.print((numLine + 1) + "\t\t");
+				String line = textLines.get(numLine);
+				ArrayList<Document> hits = oc.search(line);
+				for (int i = 0; i < hits.size(); ++i) {
+					System.out.print(hits.get(i).get("code") + ", ");
+				}
+				System.out.println();
+				System.out.print("\t\t");
+			}
+			System.out.println();
+		}
 	}
 
+	@SuppressWarnings("unused")
 	private static void task1b() {
 		OntologyClassificator oc = new OntologyClassificator("owlFiles/",
 				"icd10no.owl");
@@ -56,28 +67,7 @@ public class Program {
 		hp.createJSONFile(allMainChapters);
 	}
 
-	private static void task1a() {
-		System.out.print("Clinical note	Sentence	ICD-10\n");
-		OntologyClassificator oc = new OntologyClassificator("owlFiles/",
-				"icd10no.owl");
-		for (int numCase = 1; numCase <= numPatientCases; numCase++) {
-			ArrayList<String> textLines = new PatientCaseParser().getCase(
-					"Case " + numCase).getTextLines();
-			System.out.print(numCase + "\t\t");
-			for (int numLine = 0; numLine < textLines.size(); numLine++) {
-				System.out.print((numLine + 1) + "\t\t");
-				String line = textLines.get(numLine);
-				ArrayList<Document> hits = oc.search(line);
-				for (int i = 0; i < hits.size(); ++i) {
-					System.out.print(hits.get(i).get("code") + ", ");
-				}
-				System.out.println();
-				System.out.print("\t\t");
-			}
-			System.out.println();
-		}
-	}
-
+	@SuppressWarnings("unused")
 	private static void task1c() {
 		System.out.print("Clinical note	Sentence	ATC\n");
 		OntologyClassificator oc = new OntologyClassificator("owlFiles/",
@@ -120,7 +110,9 @@ public class Program {
 			String patientCaseIcdCodes = "";
 			for (String line : pc.getTextLines()) {
 				for (Document hit : oc.search(line)) {
-					patientCaseIcdCodes += hit.get("code") + " ";
+					patientCaseIcdCodes += hit.get("code").replaceAll(
+							"[^-a-zA-Z0-9\\.]", "")
+							+ " ";
 				}
 			}
 			System.out.println(pc.getcaseName());
@@ -128,7 +120,8 @@ public class Program {
 			int i = 0;
 			for (Document hit : OntologyClassificator.search(
 					patientCaseIcdCodes, index)) {
-				System.out.println(i + ": " + hit.get("path") + " \t:\t" + hit.get("name"));
+				System.out.println(i + ": " + hit.get("path") + " \t:\t"
+						+ hit.get("name"));
 				i++;
 			}
 			System.out.println("--------------------------------");
@@ -137,7 +130,9 @@ public class Program {
 	}
 
 	public static void main(String[] args) throws IOException {
-//		task1b();
+		//task1a();
+		//task1b();
+		//task1c();
 		task2();
 	}
 

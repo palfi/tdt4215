@@ -78,6 +78,11 @@ public class OntologyClassificator {
 	}
 
 	public ArrayList<Document> search(String querystr) {
+		/*
+		System.err.println(querystr);
+		querystr = querystr.replaceAll("[^a-zA-ZÊ¯Â∆ÿ≈ ]", "");
+		System.err.println(querystr);
+		*/
 		ArrayList<Document> returnDocs = new ArrayList<Document>();
 		try {
 			NorwegianAnalyzer analyzer = new NorwegianAnalyzer(Version.LUCENE_42);
@@ -107,6 +112,9 @@ public class OntologyClassificator {
 	}
 
 	public static ArrayList<Document> search(String querystr, Directory index) {
+		querystr = querystr.replace('*', ' ');
+		querystr = querystr.replace('?', ' ');
+		
 		ArrayList<Document> returnDocs = new ArrayList<Document>();
 		try {
 			NorwegianAnalyzer analyzer = new NorwegianAnalyzer(Version.LUCENE_42);
