@@ -120,7 +120,6 @@ public class HandbookParser {
 		return null;
 	}
 	
-
 	private Chapter createChapter(Element element) {
 		ArrayList<Chapter> subchapters = new ArrayList<Chapter>();
 		String text = "";
@@ -152,13 +151,19 @@ public class HandbookParser {
 				
 			}
 		}
-		
 		for (Element child : element.children()) {
 			if (child.className().equals("") && !child.text().equals("")) {
+				//To increase the importance of headlines
+				if (!child.tagName().equals("p")) {
+					text += "\n" + child.text() + ". ";
+					text += "\n" + child.text() + ". ";
+				}
 				text += "\n" + child.text() + ". ";
 			}
 		}
 		text = text.replaceAll("[0-9]", "");
+		text = text.replace("/", " ");
+		text = text.replace("-", " ");
 		text = text.replace("T.", "");
 		text = text.replace("T..", "");
 		text = text.replace("T...", "");

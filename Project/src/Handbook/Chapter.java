@@ -1,6 +1,13 @@
 package handbook;
 
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.lucene.queryparser.surround.query.SrndPrefixQuery;
 import org.json.simple.JSONArray;
@@ -82,8 +89,8 @@ public class Chapter {
 	
 	public ArrayList<String> getIcdCodes() {
 		return icdCodes;
-	}
-	
+	}	
+		
 	public void setIcdCodes(ArrayList<String> icdCodes) {
 		this.icdCodes = icdCodes;
 	}

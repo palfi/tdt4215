@@ -87,7 +87,7 @@ public class OntologyClassificator {
 			Query q = new QueryParser(Version.LUCENE_42, "text", analyzer)
 					.parse(querystr);
 			// 3. search
-			int hitsPerPage = 4;
+			int hitsPerPage = 10;
 			IndexReader reader = DirectoryReader.open(index);
 			IndexSearcher searcher = new IndexSearcher(reader);
 			TopScoreDocCollector collector = TopScoreDocCollector.create(
@@ -95,16 +95,16 @@ public class OntologyClassificator {
 			searcher.search(q, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
-			for (int i = 0; i < hits.length - 1; ++i) {
+			for (int i = 0; i < hits.length; ++i) {
 				int docId = hits[i].doc;
 //				if (hits[i].score > 0.5) {
 					Document d = searcher.doc(docId);
 					returnDocs.add(d);
 //				} else
 //					break;
-//				if (hits[i + 1].score < hits[i].score) {
-//					break;
-//				}
+				if (hits[i + 1].score < hits[i].score) {
+					break;
+				}
 			}
 
 			reader.close();

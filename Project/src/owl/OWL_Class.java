@@ -245,11 +245,10 @@ public class OWL_Class implements Serializable{
 		 * += v + " "; } text += "\n"; } text += "icpc2_label: "; text +=
 		 * icpc2_label + "\n";
 		 */
-		text = text.replace("*", "");
-		text = text.replace(":", "");
 		text = text.replace("-", " ");
 		text = text.replace("/", " ");
 		text = text.replaceAll("[0-9]", "");
+		text = text.replaceAll("[^\\p{L}\\p{N}\\s]", "");
 		return text;
 	}
 }

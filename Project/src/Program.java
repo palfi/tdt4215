@@ -136,7 +136,7 @@ public class Program {
 	}
 
 	public static void main(String[] args) throws IOException {
-		// task1b();
+		task1b();
 		HandbookParser hb = new HandbookParser();
 		ArrayList<Chapter> allChapters = new ArrayList<Chapter>();
 		for (Chapter chapter : hb.getMainChapters()) {
@@ -175,8 +175,7 @@ public class Program {
 			StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_42);
 			Query q = new QueryParser(Version.LUCENE_42, "icdCodes", analyzer)
 					.parse(querystr);
-			// 3. search
-			int hitsPerPage = 6;
+			int hitsPerPage = 10;
 			IndexReader reader = DirectoryReader.open(index);
 			IndexSearcher searcher = new IndexSearcher(reader);
 			TopScoreDocCollector collector = TopScoreDocCollector.create(
