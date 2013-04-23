@@ -1,0 +1,61 @@
+\chapter{Method} \label{cha:}
+
+
+% This section describes how we chose to solve the assignment, and what methods
+% we used.
+
+How we solved it
+
+\begin{itemize}
+\item Preprocessing
+	\begin{itemize}
+	\item Legemiddelhåndboka
+		\begin{itemize}
+		\item parsed HTML
+			\begin{itemize}
+			\item removed all non-alphabetic characters
+			\end{itemize}
+		\item created java objects
+			\begin{itemize}
+			\item 3 sentences instead of 1 on headers
+			\end{itemize}
+		\item save as JSON
+		\end{itemize}
+	\item Icd-10 / Atc owl file
+		\begin{itemize}
+		\item parsed owl
+		\item created java objects
+			\begin{itemize}
+			\item Each annotation is a field.
+			\end{itemize}
+		\item save as serialized java object
+		\end{itemize}
+	\item Patient cases
+		\begin{itemize}
+		\item nothing
+		\end{itemize}
+	\end{itemize}
+
+\item ICD-10 codes
+	\begin{itemize}
+	\item Lucene
+	\item Legemiddelhåndboka
+		\begin{itemize}
+		\item loading saved JSON
+		\item adding the codes to java objects
+		\item save for later
+		\end{itemize}
+	\item Patient cases
+		\begin{itemize}
+		\item each sentence
+		\item not stored, doesn't take much time
+		\end{itemize}
+	\item Matching patient cases to chapters
+		\begin{itemize}
+		\item create index of chapters’ icd codes
+		\item used the icd codes of the patient cases as query string
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+% vim: set ts=2 sw=2 tw=80:

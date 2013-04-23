@@ -4,9 +4,16 @@
 \documentclass[11pt,a4paper]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+\usepackage[pdftex]{graphicx}
 \usepackage{color}
+\usepackage{mathtools}
 \usepackage{hyperref}
 
+\setcounter{tocdepth}{1}
+
+% --------------------------------------------------------------------------- %
+% Definitions
+% --------------------------------------------------------------------------- %
 \definecolor{darkred}{rgb}{.5,0,0}
 \definecolor{darkgreen}{rgb}{0,.5,0}
 \definecolor{darkblue}{rgb}{0,0,.5}
@@ -33,7 +40,7 @@
 % --------------------------------------------------------------------------- %
 \begin{titlepage}
 \center
-\textsc{\Large Norwegian Univeristy of Science and Technology}\\[1.5cm]
+\textsc{\Large Norwegian University of Science and Technology}\\[1.5cm]
 \textsc{\large Department of Computer and Information Science}\\[0.5cm]
 \textsc{TDT4215 Web-intelligence}\\[0.5cm]
 
@@ -61,8 +68,11 @@ Einar \textsc{Uvsløkk}\\[3cm]
 % Chapters
 % --------------------------------------------------------------------------- %
 \include{introduction}
+\include{method}
 \include{architechture}
+\include{theory}
 \include{result}
+\include{improvements}
 \include{conclusion}
 
 
@@ -81,3 +91,4 @@ Einar \textsc{Uvsløkk}\\[3cm]
 
 \end{document}
 
+% vim: set ts=2 sw=2 tw=80:
