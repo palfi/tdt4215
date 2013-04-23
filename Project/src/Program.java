@@ -43,7 +43,7 @@ public class Program {
 				"icd10no.owl");
 		ArrayList<Document> hits;
 		HandbookParser hp = new HandbookParser();
-		
+
 		// gets main chapters
 		ArrayList<Chapter> allMainChapters = hp.getMainChapters();
 		// gets all chapters incl. subchapters
@@ -117,7 +117,8 @@ public class Program {
 							+ " ";
 				}
 			}
-			System.out.println("Searching index with " + pc.getcaseName() + " icd codes");
+			System.out.println("Searching index with " + pc.getcaseName()
+					+ " icd codes");
 			System.out.println(pc.getcaseName());
 			System.out.println("Icd codes: " + patientCaseIcdCodes);
 			int i = 0;
@@ -133,9 +134,9 @@ public class Program {
 	}
 
 	public static void main(String[] args) throws IOException {
-		//task1a();
-//		task1b();
-		//task1c();
+		// task1a();
+		// task1b();
+		// task1c();
 		task2();
 	}
 
