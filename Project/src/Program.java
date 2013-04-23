@@ -4,8 +4,10 @@ import handbook.HandbookParser;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.util.Version;
 
 import owl.OntologyClassificator;
 import patientCase.PatientCase;
@@ -98,7 +100,9 @@ public class Program {
 			allChapters.addAll(chapter.getAllChapters());
 		}
 		System.out.println("Creating index of chapters icd codes...");
-		Directory index = OntologyClassificator.createIndex(allChapters);
+		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_42);
+		Directory index = OntologyClassificator.createIndex(allChapters,
+				analyzer);
 		PatientCaseParser pcp = new PatientCaseParser();
 		System.out.println("Reading cases...");
 		ArrayList<PatientCase> cases = new ArrayList<PatientCase>();
@@ -123,7 +127,7 @@ public class Program {
 			System.out.println("Icd codes: " + patientCaseIcdCodes);
 			int i = 0;
 			for (Document hit : OntologyClassificator.search(
-					patientCaseIcdCodes, index)) {
+					patientCaseIcdCodes, index, analyzer)) {
 				System.out.println(i + ": " + hit.get("path") + " \t:\t"
 						+ hit.get("name"));
 				i++;

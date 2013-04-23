@@ -5,6 +5,7 @@ import handbook.Chapter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.no.NorwegianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -27,7 +28,8 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 public class OntologyClassificator {
 	private Directory index;
-
+	private Analyzer analyzer;
+	
 	private static void addDoc(IndexWriter w, String text, String code)
 			throws IOException {
 		Document doc = new Document();
@@ -67,7 +69,7 @@ public class OntologyClassificator {
 		owlParser.parse(path, fileName);
 		ArrayList<OWL_Class> owl_classes = owlParser.getOwl_Classes();
 		index = new RAMDirectory();
-		NorwegianAnalyzer analyzer = new NorwegianAnalyzer(Version.LUCENE_42);
+		analyzer = new NorwegianAnalyzer(Version.LUCENE_42);
 		IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_42,
 				analyzer);
 		IndexWriter w = new IndexWriter(index, config);
@@ -78,14 +80,8 @@ public class OntologyClassificator {
 	}
 
 	public ArrayList<Document> search(String querystr) {
-		/*
-		System.err.println(querystr);
-		querystr = querystr.replaceAll("[^a-zA-ZÊ¯Â∆ÿ≈ ]", "");
-		System.err.println(querystr);
-		*/
 		ArrayList<Document> returnDocs = new ArrayList<Document>();
 		try {
-			NorwegianAnalyzer analyzer = new NorwegianAnalyzer(Version.LUCENE_42);
 			Query q = new QueryParser(Version.LUCENE_42, "text", analyzer)
 					.parse(querystr);
 			int hitsPerPage = 10;
@@ -111,13 +107,13 @@ public class OntologyClassificator {
 		return returnDocs;
 	}
 
-	public static ArrayList<Document> search(String querystr, Directory index) {
+	public static ArrayList<Document> search(String querystr, Directory index, Analyzer analyzer) {
 		querystr = querystr.replace('*', ' ');
 		querystr = querystr.replace('?', ' ');
 		
 		ArrayList<Document> returnDocs = new ArrayList<Document>();
 		try {
-			NorwegianAnalyzer analyzer = new NorwegianAnalyzer(Version.LUCENE_42);
+			analyzer = new NorwegianAnalyzer(Version.LUCENE_42);
 			Query q = new QueryParser(Version.LUCENE_42, "icdCodes", analyzer)
 					.parse(querystr);
 			int hitsPerPage = 10;
@@ -140,9 +136,8 @@ public class OntologyClassificator {
 		return returnDocs;
 	}
 
-	public static Directory createIndex(ArrayList<Chapter> allChapters) throws IOException {
+	public static Directory createIndex(ArrayList<Chapter> allChapters, Analyzer analyzer) throws IOException {
 		Directory index = new RAMDirectory();
-		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_42);
 		IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_42,
 				analyzer);
 		IndexWriter w = new IndexWriter(index, config);
