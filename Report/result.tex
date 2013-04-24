@@ -1,12 +1,29 @@
 \chapter{Result}
 \label{cha:result}
 
+As we can see, the result is pretty split between good and bad. We think we did
+pretty good compared to the gold standard on case 1,2,3 and 7, but very bad at
+case 4,5,6 and 8. We think the reason we did bad on some cases is because our
+method had to be tweaked some more. We did not have time to test different
+tweaks as much as we would have liked.
 
-\begin{table}[htbp]\footnotesize\center
+One thing we did to improve the search results was to make three sentences from
+each header when parsing Legemiddelhåndboka. We did this because the headers
+contains more valuable information than some random sentence in a chapter. By
+creating three sentences of the headers we also get three icd-10 codes instead
+of one for the headers. This improved our results some.
+
+Although we save all the annotations of the ontology classes, we just use label,
+underterm, synonym we assigned icd-10 codes to the sentences of
+Legemiddelhåndboka and the patient cases. We got the most accurate results by
+using these labels. We did not create some sort of automatic testing tool, we
+did it by hand, that is why we do not have any statistics on test of the tweaks
+we tried.
+% --------------------------------------------------------------------------- %
+\begin{table}[htbp]\center
+\caption{Case 1}
 \begin{tabular}{cll}
 \toprule
-Clinical note & Sentence & ICD-10 \\
-\midrule
 1 & T3.1.htm\#i325629  & T3.1 Diabetes mellitus \\
   & T12.2.htm\#i16634  & T12.2 Pankreassykdommer \\
   & T3.1.htm\#i326056  & T3.1.6 Nasjonale retningslinjer og andre nettressurser \\
@@ -15,26 +32,24 @@ Clinical note & Sentence & ICD-10 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\begin{table}[htbp]\footnotesize\center
+% --------------------------------------------------------------------------- %
+\begin{table}[htbp]\center
+\caption{Case 2}
 \begin{tabular}{cll}
 \toprule
-Clinical note & Sentence & ICD-10 \\
-\midrule
 2 & T24.2.htm\#i27164  & T24.2.1 NukleÊrmedisinsk diagnostikk \\
-  & T11.2.htm\#i15892  & T11.2.1.5 ÿrevoks \\
+  & T11.2.htm\#i15892  & T11.2.1.5 Ørevoks \\
   & T10.2.htm\#i14285  & T10.2  Obstruktiv lungesykdom \\
   & T10.2.htm\#i14682  & T10.2.2 Kronisk obstruktiv lungesykdom (kols) \\
-  & T23.1.htm\#i25028  & T23.1.1 ErnÊring – innledning \\
+  & T23.1.htm\#i25028  & T23.1.1 Ernæring – innledning \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\begin{table}[htbp]\footnotesize\center
+% --------------------------------------------------------------------------- %
+\begin{table}[htbp]\center
+\caption{Case 3}
 \begin{tabular}{cll}
 \toprule
-Clinical note & Sentence & ICD-10 \\
-\midrule
 3 & T1.10.htm\#i1849   & T1.10 Akutt bakteriell meningitt \\
   & T10.3.htm\#i14959  & T10.3.4  Pneumonier, bakterielle og med ukjent etiologi \\
   & T15.3.htm\#i19851  & T15.3.3 Brystabscess \\
@@ -43,12 +58,11 @@ Clinical note & Sentence & ICD-10 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\begin{table}[htbp]\footnotesize\center
+% --------------------------------------------------------------------------- %
+\begin{table}[htbp]\center
+\caption{Case 4}
 \begin{tabular}{cll}
 \toprule
-Clinical note & Sentence & ICD-10 \\
-\midrule
 4 & L1.5.htm\#i34973   & L1.5.1.7 Artemeter–lumefantrin \\
   & L6.7.htm\#i59277   & L6.7.2 Atomoksetin \\
   & L17.1.htm\#i75463  & L17.1.1.11 Nabumeton \\
@@ -57,26 +71,24 @@ Clinical note & Sentence & ICD-10 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\begin{table}[htbp]\footnotesize\center
+% --------------------------------------------------------------------------- %
+\begin{table}[htbp]\center
+\caption{Case 5}
 \begin{tabular}{cll}
 \toprule
-Clinical note & Sentence & ICD-10 \\
-\midrule
-5 & T12.3.htm\#i17069  & T12.3.4.3 ÿsofagusvaricer \\
-  & T12.5.htm\#i17280  & T12.5.2 PostkolecystektomibesvÊr \\
+5 & T12.3.htm\#i17069  & T12.3.4.3 Øsofagusvaricer \\
+  & T12.5.htm\#i17280  & T12.5.2 Postkolecystektomibesvær \\
   & T12.10.htm\#i17939 & T12.10 Anorektale forstyrrelser \\
   & T12.3.htm\#i17017  & T12.3.4 Avanserte leversykdommer \\
   & T12.10.htm\#i17941 & T12.10.1 Hemoroider \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\begin{table}[htbp]\footnotesize\center
+% --------------------------------------------------------------------------- %
+\begin{table}[htbp]\center
+\caption{Case 6}
 \begin{tabular}{cll}
 \toprule
-Clinical note & Sentence & ICD-10 \\
-\midrule
 6 & T5.4.htm\#i8421    & T5.4.1 Schizofreni \\
   & T1.5.htm\#i741     & T1.5 Urinveisinfeksjoner \\
   & L18.4.htm\#i77452  & L18.4.3.7 Muromonab-CD3 \\
@@ -85,12 +97,11 @@ Clinical note & Sentence & ICD-10 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\begin{table}[htbp]\footnotesize\center
+% --------------------------------------------------------------------------- %
+\begin{table}[htbp]\center
+\caption{Case 7}
 \begin{tabular}{cll}
 \toprule
-Clinical note & Sentence & ICD-10 \\
-\midrule
 7 & T20.1.htm\#i22866  & T20.1.2 Legemiddeltyper i smertebehandlingen \\
   & T20.1.htm\#i22894  & T20.1.2.3 Co-analgetika \\
   & T21.1.htm\#i23454  & T21.1.1 Smerter \\
@@ -99,12 +110,11 @@ Clinical note & Sentence & ICD-10 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\begin{table}[htbp]\footnotesize\center
+% --------------------------------------------------------------------------- %
+\begin{table}[htbp]\center
+\caption{Case 8}
 \begin{tabular}{cll}
 \toprule
-Clinical note & Sentence & ICD-10 \\
-\midrule
 8 & T16.5.htm\#i20468  & T16.5.2.4 Mollusker \\
   & T11.1.htm\#i15651  & T11.1.3.3 Akutt subglottisk laryngitt \\
   & T11.1.htm\#i15606  & T11.1.3 Laryngitt \\
@@ -141,19 +151,19 @@ An improvement would to take a more semantic approach and use more of the
 semantics in the ICD-10 ontology. If we looked at which ICD-10 classes that was
 a parent of other classes the system might have gotten more precise.
 
-Lucene gives the developer lots of opportunities to customize how it is ran. An
+Lucene gives the developer lots of opportunities to customize how it is run. An
 improvement could have been achieved by experimenting with different ways of
 configuring Lucene, especially how it calculates similarities(scoring).
 
 Even though we use an Norwegian analyzer with Lucene that is suppose to have
-stop words we could have added our own stop words, which could make everything
-we did with Lucene more accurate.
+stop words we could have added our own stop words, which could make everything we
+did with Lucene more accurate.
 
 Another potential improvement would be to use more than one ontology for
 classification. We could use a combination of ATC and ICD when matching patient
 cases to chapters. If a patient case and a chapter in Legemiddelhåndboka would
 match with the usage of both ontologies we would be more sure that this was a
-good match than we would with just one ontology.
+better match than we would with just one ontology.
 
 % vim: set ts=2 sw=2 tw=80:
 
