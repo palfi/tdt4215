@@ -1,58 +1,81 @@
 \chapter{Method}
 \label{cha:method}
 
-% This section describes how we chose to solve the assignment, and what methods
-% we used.
-%
-% How we solved it
-%
-% - Preprocessing
-%   - Legemiddelhåndboka
-%     - parsed HTML
-%       - removed all non-alphabetic characters
-%     - created Java objects
-%       - 3 sentences instead of 1 on headers
-%     - save as json
-%   - Icd-10 / Atc OWL file:
 
-We first parse the OWL files using the OWL API. In order not to parse every time
-we run the program, we save it as a serializable Java object.
+% --------------------------------------------------------------------------- %
+% Preprocessing
+% --------------------------------------------------------------------------- %
+\section{Preprocessing}
+\label{sec:preprocessing}
 
-The Java objects have a String field for each annotation of each class of the
-OWL ontology.
+We started with parsing Legemiddelhåndboka. We parsed page at a time and created
+a Chapter java object of each chapter. If a chapter contains sub-chapters they
+will be saved in a list of chapter objects in the parents’ chapter object. We
+made custom parser using the Jsoup library. When we had parsed and made java
+objects of all the chapters we used stored these objects for later use using
+JSON format. This is because parsing the Legemiddelhåndboka takes some time and
+does not need to be done every time the system starts. We chose JSON format
+because this is readable for humans which was handy during development.
 
-%(code_formatted, code_compacted, icpc2_code, icpc2_label, rdf-schema#label,
-%umls_tui, umls_conceptId, umls_atomId, umls_semanticType, exclusion, synonym,
-%underterm, inclusion, rdf-schema#seeAlso)
+We first parse the OWL files using the OWL API. The information we got from each
+class in the OWL ontology we saved as serializable Java objects. The Java
+objects have a String field for each annotation of each class of the OWL
+ontology.
 
-Although we save all the annotations we just use label, underterm, synonym to
-search for similarities between the patient cases and the ICD10 ontology.
+We decided not to preprocess any of the cases. This is because they were small
+and easy to parse. We just copied the files from the docx file and created a
+.txt file for each case.
 
-%   - Patientcases
-%     - nothing
-% - ICD-10 codes
+For all the text we parsed we removed all non-alphabetic characters. This was
+because we did not think those characters provides us with any valuable
+information.
 
-We use Lucene as a searching engine for matching similarities between the ICD-10
+After this step we got all the necessary information from Legemiddelhåndboka chapters
+and the text (from annotations) from the owl classes saved in java objects.
+
+
+% --------------------------------------------------------------------------- %
+% ICD-10 codes
+% --------------------------------------------------------------------------- %
+\section{ICD-10-codes}
+\label{sec:}
+
+We use Lucene as a search engine for matching similarities between the ICD-10
 ontology and the patient cases. What we did was to create and index Lucene
 documents, this documents has two main fields; a Lucene TextField with the
 description of each class (label, underterm, synonym annotations) and a Lucene
 StringField with the ICD-10 code. Lucene will only tokenize the TextField
 content.
 
-Then we use each sentence of the patient cases as a query, Lucene will retrieves
-a list of all relevant documents ranked by score.
+For each sentence in each chapter in Legemiddelhåndboka we used the index we
+created to get the Lucene document(that contains the information from the the
+owl class) that had the best score. From this document we retrieved the ICD-10
+code. When we got all the ICD-10 codes for every sentence in each chapter we
+updated the JSON file to also contain these codes, since these won’t ever change
+as long as the text in Legemiddelhåndboka doesn’t change.
 
-%   - Lucene
-%   - Legemiddelhåndboka
-%     - loading saved json
-%     - adding the codes to Java objects
-%     - save for later
-%   - Patient cases
-%     - each sentence
-%     - not stored, doesn't take much time
-% - MATChing patientcases to chapters
-%   - create index of chapters’ ICD codes
-%   - used the ICD codes of the patient cases as query string
+We found the ICD-10 code that matched each sentence in each of the patient cases
+as well, but we did not bother storing these as this job is lightweight compared
+to getting the ICD-10 codes for all the Legemiddelhåndboka chapters.
+
+After this step we got a string of ICD-10 codes for every chapter and all the
+patient cases.
 
 
-% vim: set ts=2 sw=2 tw=80:
+% --------------------------------------------------------------------------- %
+% Ranking
+% --------------------------------------------------------------------------- %
+\section{Ranking}
+\label{sec:ranking}
+
+Since we got ICD-10 codes for each chapter as well as ICD-10 codes for each
+patient case we had to use these to get the most relevant chapter for each
+patient case. The way we approached it was to create an Lucene index with all
+the ICD-10 codes from each chapter. Then we query this index with the ICD-10
+codes for each patient as a query string. The thought behind this is that if a
+ICD-10 codes is relevant for many sentences in a Legemiddelhåndboka chapter as
+well as relevant for many sentences in a patient case, then the chapter and the
+case is most likely relevant to each other.
+
+
+% vim: set ts=2 sw=2 tw=80
