@@ -1,61 +1,58 @@
-\chapter{Method} \label{cha:}
-
+\chapter{Method}
+\label{cha:method}
 
 % This section describes how we chose to solve the assignment, and what methods
 % we used.
+%
+% How we solved it
+%
+% - Preprocessing
+%   - Legemiddelhåndboka
+%     - parsed HTML
+%       - removed all non-alphabetic characters
+%     - created Java objects
+%       - 3 sentences instead of 1 on headers
+%     - save as json
+%   - Icd-10 / Atc OWL file:
 
-How we solved it
+We first parse the OWL files using the OWL API. In order not to parse every time
+we run the program, we save it as a serializable Java object.
 
-\begin{itemize}
-\item Preprocessing
-	\begin{itemize}
-	\item Legemiddelhåndboka
-		\begin{itemize}
-		\item parsed HTML
-			\begin{itemize}
-			\item removed all non-alphabetic characters
-			\end{itemize}
-		\item created java objects
-			\begin{itemize}
-			\item 3 sentences instead of 1 on headers
-			\end{itemize}
-		\item save as JSON
-		\end{itemize}
-	\item Icd-10 / Atc owl file
-		\begin{itemize}
-		\item parsed owl
-		\item created java objects
-			\begin{itemize}
-			\item Each annotation is a field.
-			\end{itemize}
-		\item save as serialized java object
-		\end{itemize}
-	\item Patient cases
-		\begin{itemize}
-		\item nothing
-		\end{itemize}
-	\end{itemize}
+The Java objects have a String field for each annotation of each class of the
+OWL ontology.
 
-\item ICD-10 codes
-	\begin{itemize}
-	\item Lucene
-	\item Legemiddelhåndboka
-		\begin{itemize}
-		\item loading saved JSON
-		\item adding the codes to java objects
-		\item save for later
-		\end{itemize}
-	\item Patient cases
-		\begin{itemize}
-		\item each sentence
-		\item not stored, doesn't take much time
-		\end{itemize}
-	\item Matching patient cases to chapters
-		\begin{itemize}
-		\item create index of chapters’ icd codes
-		\item used the icd codes of the patient cases as query string
-		\end{itemize}
-	\end{itemize}
-\end{itemize}
+%(code_formatted, code_compacted, icpc2_code, icpc2_label, rdf-schema#label,
+%umls_tui, umls_conceptId, umls_atomId, umls_semanticType, exclusion, synonym,
+%underterm, inclusion, rdf-schema#seeAlso)
+
+Although we save all the annotations we just use label, underterm, synonym to
+search for similarities between the patient cases and the ICD10 ontology.
+
+%   - Patientcases
+%     - nothing
+% - ICD-10 codes
+
+We use Lucene as a searching engine for matching similarities between the ICD-10
+ontology and the patient cases. What we did was to create and index Lucene
+documents, this documents has two main fields; a Lucene TextField with the
+description of each class (label, underterm, synonym annotations) and a Lucene
+StringField with the ICD-10 code. Lucene will only tokenize the TextField
+content.
+
+Then we use each sentence of the patient cases as a query, Lucene will retrieves
+a list of all relevant documents ranked by score.
+
+%   - Lucene
+%   - Legemiddelhåndboka
+%     - loading saved json
+%     - adding the codes to Java objects
+%     - save for later
+%   - Patient cases
+%     - each sentence
+%     - not stored, doesn't take much time
+% - MATChing patientcases to chapters
+%   - create index of chapters’ ICD codes
+%   - used the ICD codes of the patient cases as query string
+
 
 % vim: set ts=2 sw=2 tw=80:

@@ -1,6 +1,7 @@
 \chapter{Theory}
 \label{cha:theory}
 
+
 % --------------------------------------------------------------------------- %
 % Indexing
 % --------------------------------------------------------------------------- %
@@ -9,8 +10,8 @@
 
 Lucene work with Document objects, each Document have Fields, each Field is
 analyzed differently, for instance: a TextField is for content we want tokenized
-(the description part of the icd10 codes), and StringField is for content we
-don't want tokenized (the icd10 codes).
+(the description part of the ICD10 codes), and StringField is for content we
+don't want tokenized (the ICD10 codes).
 
 There are two main parts in the indexing process:
 
@@ -33,7 +34,7 @@ The documents are chosen by a Boolean Model and are scored by a Vector Space
 Model (VSM).
 % TODO abbr ref VSM
 \[
-	\operatorname{cosine-similarity}(q,d) = \frac{V(q) \cdot V(d)} {|V(q)|\ |V(d)|}
+	\opn{cosine-similarity}(q,d) = \frac{V(q) \cdot V(d)} {|V(q)|\ |V(d)|}
 \]
 %
 Where \(V(q) \cdot V(d)\) is the dot product (intersection) of the weighted
@@ -43,42 +44,39 @@ For practical reasons the real formula that Lucene uses is:
 %
 \begin{equation*}
 \begin{split}
-	\operatorname{score}(q,d) =
-	& \operatorname{coord}(q,d) \cdot
-		\operatorname{queryNorm}(q)  \\
-	& \cdot
-		\sum_{t \operatorname{in} q} (
-			\operatorname{tf}(t\operatorname{in}d) \cdot
-			\operatorname{idf}(t)^{2} \cdot
-			\operatorname{t.getBoost}() \cdot
-			\operatorname{norm}(t,d)
-		)
+	\opn{score}(q,d) = & \opn{coord}(q,d) \cdot \opn{queryNorm}(q) \\
+	                   & \cdot \sum_{t \opn{in} q} (
+	                             \opn{tf}(t\opn{in}d) \cdot
+	                             \opn{idf}(t)^{2} \cdot
+	                             \opn{t.getBoost}() \cdot
+	                             \opn{norm}(t,d)
+	                           )
 \end{split}
 \end{equation*}
 %
 \begin{description}
 
-\item[\(tf(t\operatorname{in}d)\)]
-correlates to the term's frequency, defined as the number of times term \(t\)
+\item[\(tf(t\opn{in}d)\)]
+correlates to the terms frequency, defined as the number of times term \(t\)
 appears in the currently scored document \(d\).
 
-\item[\(\operatorname{idf}(t)\)]
+\item[\(\opn{idf}(t)\)]
 stands for Inverse Document Frequency.
 \[
-	\operatorname{idf}(t) = 1 + \log(\frac{numDocs}{docFreq + 1})
+	\opn{idf}(t) = 1 + \log(\frac{numDocs}{docFreq + 1})
 \]
 
-\item[\(\operatorname{coord}(q,d)\)]
+\item[\(\opn{coord}(q,d)\)]
 is a score factor based on how many of the query terms are found in the
 specified document.
 
-\item[\(\operatorname{queryNorm}(q)\)]
+\item[\(\opn{queryNorm}(q)\)]
 is a normalizing factor, doesn’t affect to the ranking.
 
-\item[\(\operatorname{t.getBoost}()\)]
+\item[\(\opn{t.getBoost}()\)]
 is a search time boost of term t in the query q.
 
-\item[\(\operatorname{norm}(t,d)\)]
+\item[\(\opn{norm}(t,d)\)]
 encapsulates a few (indexing time) boost and length factors.
 
 \end{description}

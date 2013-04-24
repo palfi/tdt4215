@@ -1,5 +1,11 @@
-% TDT4215 Web-intelligence
+% --------------------------------------------------------------------------- %
+% TDT4215 Web-intelligence - Group project
 % NTNU spring 2013
+%
+% Anders Palfi
+% Javier Elizaga Quevedo
+% Einar Uvsløkk
+% --------------------------------------------------------------------------- %
 
 \documentclass[11pt,a4paper]{report}
 \usepackage[utf8]{inputenc}
@@ -7,9 +13,14 @@
 \usepackage[pdftex]{graphicx}
 \usepackage{color}
 \usepackage{mathtools}
+\usepackage[intoc]{nomencl}
+\usepackage{booktabs}
 \usepackage{hyperref}
 
+
 \setcounter{tocdepth}{1}
+\makenomenclature
+
 
 % --------------------------------------------------------------------------- %
 % Definitions
@@ -31,9 +42,11 @@
 \newcommand{\ICD}{International Classification of Diseases}
 \newcommand{\ATC}{Anatomical Therapeutic Chemical classification of Drug}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\opn}{\operatorname}
 
 
 \begin{document}
+
 
 % --------------------------------------------------------------------------- %
 % Title page
@@ -45,7 +58,7 @@
 \textsc{TDT4215 Web-intelligence}\\[0.5cm]
 
 \HRule \\[0.5cm]
-{\huge \bfseries Group project}\\[0.2cm]
+{\huge \bfseries Project report}\\[0.2cm]
 \HRule \\[1.5cm]
 
 \Large \emph{Authors:}\\
@@ -53,34 +66,39 @@ Anders \textsc{Palfi}\\
 Javier \textsc{Elizaga Quevedo}\\
 Einar \textsc{Uvsløkk}\\[3cm]
 
+{\large Word count: 1146}\\
 {\large \today}\\[3cm]
 
 \vfill
 
 \end{titlepage}
 
+
 % --------------------------------------------------------------------------- %
 % Table of contents
 % --------------------------------------------------------------------------- %
 \tableofcontents
+\input{abbreviations}
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
+
 
 % --------------------------------------------------------------------------- %
 % Chapters
 % --------------------------------------------------------------------------- %
-\include{introduction}
-\include{method}
-\include{architechture}
-\include{theory}
-\include{result}
-\include{improvements}
-\include{conclusion}
+\input{introduction}
+\input{method}
+\input{architechture}
+\input{theory}
+\input{result}
+\input{conclusion}
 
 
 % --------------------------------------------------------------------------- %
 % Bibliography
 % --------------------------------------------------------------------------- %
-\bibliographystyle{plain}
-\bibliography{references}
+\bibliographystyle{alpha}
+\bibliography{bibliography}
 \addcontentsline{toc}{chapter}{Bibliography}
 
 
