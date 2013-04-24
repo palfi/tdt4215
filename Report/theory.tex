@@ -1,6 +1,10 @@
 \chapter{Theory}
 \label{cha:theory}
 
+For the search engine we used Lucene because has very good reviews and plenty of
+tutorials.  In conclusion, adding a basic search engine for a set of documents
+is easy, but making an accurate and efficient mechanism search takes a lot of
+time and effort.
 
 % --------------------------------------------------------------------------- %
 % Indexing
@@ -10,16 +14,16 @@
 
 Lucene work with Document objects, each Document have Fields, each Field is
 analyzed differently, for instance: a TextField is for content we want tokenized
-(the description part of the ICD10 codes), and StringField is for content we
-don't want tokenized (the ICD10 codes).
-
+(the description part of the ICD-10 codes), and StringField is for content we
+don't want tokenized (the ICD-10 codes).\\
+\\
 There are two main parts in the indexing process:
 
 \begin{itemize}
 \item The Analyzer extracts tokens out of text to be indexed.
 
 \item The IndexWriter is a key component in the indexing process, is the one
-      that adds documents to the index.
+			that adds documents to the index.
 \end{itemize}
 
 
@@ -29,16 +33,22 @@ There are two main parts in the indexing process:
 % TODO typeset math equations
 \section{Scoring}
 \label{sec:scoring}
-
-The documents are chosen by a Boolean Model and are scored by a Vector Space
-Model (VSM).
-% TODO abbr ref VSM
+% TODO VSM footnote:
+The documents are chosen by a Boolean Model and are scored by a \emph{Vector
+Space Model} (VSM)\footnotemark[1]. Lucene uses the boolean model to first
+narrow down the number of documents that needs to be scored by VSM. The idea
+behind the Vector Space Model is the more times a query term appears in a
+document compared to the total number of times the term appears in all the
+documents in the documents collection, the more relevant is that document.\\
+\\
+The similarity in Lucene is calculated by:
 \[
-	\opn{cosine-similarity}(q,d) = \frac{V(q) \cdot V(d)} {|V(q)|\ |V(d)|}
+	\opn{cosine-similarity}(q,d) = \frac{V(q) \cdot V(d)} {|V(q)||V(d)|}
 \]
 %
-Where \(V(q) \cdot V(d)\) is the dot product (intersection) of the weighted
-vectors, and \(|V(q)|\) and \(|V(d)|\) are their Euclidean norms.\\
+Where \(V(q) \cdot V(d)\) is the \emph{dot product}\footnotemark[2]
+(intersection) of the weighted vectors, and \(|V(q)|\) and \(|V(d)|\) are their
+\emph{Euclidean norms}\footnotemark[3].\\
 \\
 For practical reasons the real formula that Lucene uses is:
 %
@@ -80,5 +90,10 @@ is a search time boost of term t in the query q.
 encapsulates a few (indexing time) boost and length factors.
 
 \end{description}
+
+
+\footnotetext[1]{\url{http://en.wikipedia.org/wiki/Vector\_Space\_Model}}
+\footnotetext[2]{\url{http://en.wikipedia.org/wiki/Dot\_product}}
+\footnotetext[3]{\url{http://en.wikipedia.org/wiki/Euclidean\_norm\#Euclidean\_norm}}
 
 % vim: set ts=2 sw=2 tw=80:
